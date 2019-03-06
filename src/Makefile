@@ -3,7 +3,7 @@
 # the list is topologically sorted
 MODULES := \
  extBytes enum bitSet dynArray extArray extHashtbl extList extString extBuffer \
- global IO option pMap std uChar uTF8 base64 unzip refList optParse dllist extLib
+ global IO option pMap std uChar uTF8 unzip refList optParse dllist extLib
 
 ifdef minimal
 MODULES := $(filter-out unzip uChar uTF8, $(MODULES))
