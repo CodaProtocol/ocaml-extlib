@@ -1,0 +1,46 @@
+## OBAZL GENERATED FILE ## To retain edits (prevent overwrite), delete this line.
+
+config_setting(
+    name = "enable_always_link",
+    flag_values = {"//:always_link": str(True)},
+)
+
+config_setting(
+    name = "disable_always_link",
+    flag_values = {"//:always_link": str(False)},
+)
+
+config_setting(
+    name = "enable_output_cmt",
+    flag_values = {"//:cmt": str(True)},
+)
+
+config_setting(
+    name = "disable_output_cmt",
+    flag_values = {"//:cmt": str(False)},
+)
+
+config_setting(
+    name = "enable_debug",
+    flag_values = {"//:debug": str(True)},
+)
+
+config_setting(
+    name = "disable_debug",
+    flag_values = {"//:debug": str(False)},
+)
+
+config_setting(
+    name = "enable_verbose",
+    flag_values = {"//:verbose": str(True)},
+)
+
+config_setting(
+    name = "disable_verbose",
+    flag_values = {"//:verbose": str(False)},
+)
+
+config_setting(
+    name = "with_bytes",
+    flag_values = {"//:bytes": str(True)},
+)
