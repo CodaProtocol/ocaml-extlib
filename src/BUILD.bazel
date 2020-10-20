@@ -371,7 +371,7 @@ ocaml_module(
     src  = ":ExtString_cppo",
     intf = ":ExtString_cmi",
     ns_module = ":extLib_ns_module",
-    opts = IMPL_OPTS,
+    opts = IMPL_OPTS + ["-w", "-3"],
     visibility = ["//visibility:public"],
     deps = COMMON_DEPS + [
         ":Enum",
