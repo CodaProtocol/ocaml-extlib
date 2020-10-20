@@ -215,7 +215,7 @@ ocaml_interface(
     name = "ExtBuffer_cmi",
     src  = ":ExtBuffer.cppo_mli",
     ns_module = ":extLib_ns_module",
-    opts = IMPL_OPTS,
+    opts = INTF_OPTS + ["-w", "-44"],
     visibility = ["//visibility:private"],
     deps = COMMON_DEPS + [
         ":ExtBytes",
@@ -371,7 +371,7 @@ ocaml_module(
     src  = ":ExtString_cppo",
     intf = ":ExtString_cmi",
     ns_module = ":extLib_ns_module",
-    opts = IMPL_OPTS + ["-w", "-3"],
+    opts = IMPL_OPTS + ["-w", "-3-44"],
     visibility = ["//visibility:public"],
     deps = COMMON_DEPS + [
         ":Enum",
@@ -410,7 +410,7 @@ ocaml_interface(
     name = "IO_cmi",
     src  = "IO.mli",
     ns_module = ":extLib_ns_module",
-    opts = IMPL_OPTS,
+    opts = INTF_OPTS + ["-w", "-44"],
     visibility = ["//visibility:private"],
     deps = COMMON_DEPS + [
         ":Enum",
