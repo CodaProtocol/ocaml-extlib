@@ -41,6 +41,28 @@ Dependencies
 Installation
 ------------
 
+### Bazel
+
+Minimal build, excluding modules `Unzip`, `UChar`, `UTF8`:
+
+`$ bazel build src:extLib`
+
+(NB: not `src:ExtLib`)
+
+Maximal build, including modules `Unzip`, `UChar`, `UTF8`:
+
+`$ bazel build src:extLib --no//:minimal`
+
+This will build but not install the library, native mode only.
+
+For details see [bzl/README.md](bzl/README.md)
+
+Tests:
+
+(Not yet supported)
+
+### Legacy
+
 Unzip or untar in any directory and run
 
   `make minimal=1 build install`

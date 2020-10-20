@@ -1,3 +1,5 @@
+## OBAZL GENERATED FILE ## To retain edits (prevent overwrite), delete this line.
+
 ALWAYS_LINK = select({
     "//bzl/config:enable_always_link": ["-linkall"],
     "//conditions:default": [],
@@ -15,16 +17,15 @@ VERBOSE = select({
     "//conditions:default": [],
 })
 
-COMMON_DEPS = ["@opam//pkg:bytes"]
+COMMON_DEPS = []
 
 COMMON_OPTS = [
     "-strict-formats",
     "-short-paths",
     "-w",
-    # "+A",
-    "+A-3-27-39-42-44-48-50",
-    # "-warn-error",
-    # "+A-3-44",
+    "+A-42-48",
+    "-warn-error",
+    "+A-3-44",
 ] + ALWAYS_LINK + OUTPUT_CMT + DEBUG + VERBOSE
 
 ARCHIVE_OPTS = COMMON_OPTS

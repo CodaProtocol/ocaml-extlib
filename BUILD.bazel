@@ -7,4 +7,5 @@ bool_flag( name = "cmt", build_setting_default = True )
 bool_flag( name = "debug", build_setting_default = True )
 bool_flag( name = "verbose", build_setting_default = False )
 
+bool_flag( name = "minimal", build_setting_default = True )
 bool_flag( name = "bytes", build_setting_default = True )

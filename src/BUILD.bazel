@@ -1,20 +1,19 @@
 ## OBAZL GENERATED FILE ## To retain edits (prevent overwrite), delete this line.
 
 load(
-    "@obazl_rules_ocaml//ocaml:build.bzl",
+    "@obazl_rules_ocaml//ocaml:rules.bzl",
     "ocaml_archive",
     "ocaml_interface",
     "ocaml_module",
     "ocaml_ns_module",
 )
-load("@obazl_rules_ocaml//ocamlx:build.bzl", "ocamlx_cppo_runner")
+load("@obazl_rules_ocaml//ocaml/extension:rules.bzl", "ocamlx_cppo_runner")
 load(
     "CPPO.bzl",
     "CPPO_OCAML_VERSION",
     "CPPO_WITH_BYTES",
     "CPPO_WORD_SIZE",
 )
-
 load(
     "BUILD.bzl",
     "ARCHIVE_OPTS",
@@ -44,14 +43,14 @@ ocaml_archive(
         ":Option",
         ":PMap",
         ":Std",
-        ":UChar",
-        ":UTF8",
-        ":Unzip",
         ":RefList",
         ":OptParse",
         ":Dllist",
         ":ExtLib",
-    ],
+    ] + select({
+        "//bzl/config:minimal": [],
+        "//conditions:default": [":Unzip", "UChar", "UTF8"]
+    }),
 )
 
 EXTLIB_NS = "ExtLib"
@@ -75,19 +74,19 @@ ocaml_ns_module(
         "option.ml",
         "pMap.ml",
         "std.ml",
-        "uChar.ml",
-        "uTF8.ml",
-        "unzip.ml",
         "refList.ml",
         "optParse.ml",
         "dllist.ml",
         "extLib.ml",
-    ],
+    ] + select({
+        "//bzl/config:minimal": [],
+        "//conditions:default": ["unzip.ml", "uChar.ml", "uTF8.ml"]
+    }),
 )
 
 ocaml_interface(
     name = "BitSet_cmi",
-    intf = "bitSet.mli",
+    src  = "bitSet.mli",
     ns_module = ":extLib_ns_module",
     opts = IMPL_OPTS,
     visibility = ["//visibility:private"],
@@ -98,10 +97,10 @@ ocaml_interface(
 
 ocaml_module(
     name = "BitSet",
-    impl = "bitSet.ml",
+    src  = "bitSet.ml",
     intf = ":BitSet_cmi",
     ns_module = ":extLib_ns_module",
-    opts = IMPL_OPTS,
+    opts = INTF_OPTS + ["-w", "-44-39"],
     visibility = ["//visibility:public"],
     deps = COMMON_DEPS + [
         ":Enum",
@@ -111,7 +110,7 @@ ocaml_module(
 
 ocaml_interface(
     name = "Dllist_cmi",
-    intf = "dllist.mli",
+    src  = "dllist.mli",
     ns_module = ":extLib_ns_module",
     opts = IMPL_OPTS,
     visibility = ["//visibility:private"],
@@ -122,7 +121,7 @@ ocaml_interface(
 
 ocaml_module(
     name = "Dllist",
-    impl = "dllist.ml",
+    src  = "dllist.ml",
     intf = ":Dllist_cmi",
     ns_module = ":extLib_ns_module",
     opts = IMPL_OPTS,
@@ -134,7 +133,7 @@ ocaml_module(
 
 ocaml_interface(
     name = "DynArray_cmi",
-    intf = "dynArray.mli",
+    src  = "dynArray.mli",
     ns_module = ":extLib_ns_module",
     opts = IMPL_OPTS,
     visibility = ["//visibility:private"],
@@ -145,10 +144,10 @@ ocaml_interface(
 
 ocaml_module(
     name = "DynArray",
-    impl = "dynArray.ml",
+    src  = "dynArray.ml",
     intf = ":DynArray_cmi",
     ns_module = ":extLib_ns_module",
-    opts = IMPL_OPTS,
+    opts = INTF_OPTS + ["-w", "-27-39"],
     visibility = ["//visibility:public"],
     deps = COMMON_DEPS + [
         ":Enum",
@@ -157,7 +156,7 @@ ocaml_module(
 
 ocaml_interface(
     name = "Enum_cmi",
-    intf = "enum.mli",
+    src  = "enum.mli",
     ns_module = ":extLib_ns_module",
     opts = IMPL_OPTS,
     visibility = ["//visibility:private"],
@@ -167,7 +166,7 @@ ocaml_interface(
 
 ocaml_module(
     name = "Enum",
-    impl = "enum.ml",
+    src  = "enum.ml",
     intf = ":Enum_cmi",
     ns_module = ":extLib_ns_module",
     opts = IMPL_OPTS,
@@ -178,7 +177,7 @@ ocaml_module(
 
 ocaml_interface(
     name = "ExtArray_cmi",
-    intf = ":ExtArray.cppo_mli",
+    src  = ":ExtArray.cppo_mli",
     ns_module = ":extLib_ns_module",
     opts = IMPL_OPTS,
     visibility = ["//visibility:private"],
@@ -195,10 +194,10 @@ ocamlx_cppo_runner(
 
 ocaml_module(
     name = "ExtArray",
-    impl = ":ExtArray_cppo",
+    src  = ":ExtArray_cppo",
     intf = ":ExtArray_cmi",
     ns_module = ":extLib_ns_module",
-    opts = IMPL_OPTS,
+    opts = INTF_OPTS + ["-w", "-3-27"],
     visibility = ["//visibility:public"],
     deps = COMMON_DEPS + [
         ":BitSet",
@@ -214,7 +213,7 @@ ocamlx_cppo_runner(
 
 ocaml_interface(
     name = "ExtBuffer_cmi",
-    intf = ":ExtBuffer.cppo_mli",
+    src  = ":ExtBuffer.cppo_mli",
     ns_module = ":extLib_ns_module",
     opts = IMPL_OPTS,
     visibility = ["//visibility:private"],
@@ -231,10 +230,10 @@ ocamlx_cppo_runner(
 
 ocaml_module(
     name = "ExtBuffer",
-    impl = ":ExtBuffer_cppo",
+    src  = ":ExtBuffer_cppo",
     intf = ":ExtBuffer_cmi",
     ns_module = ":extLib_ns_module",
-    opts = IMPL_OPTS,
+    opts = IMPL_OPTS + ["-w", "-33"],
     visibility = ["//visibility:public"],
     deps = COMMON_DEPS + [
         ":ExtBytes",
@@ -249,7 +248,7 @@ ocamlx_cppo_runner(
 
 ocaml_module(
     name = "ExtBytes",
-    impl = ":ExtBytes_cppo",
+    src  = ":ExtBytes_cppo",
     ns_module = ":extLib_ns_module",
     opts = IMPL_OPTS,
     visibility = ["//visibility:public"],
@@ -265,9 +264,9 @@ ocamlx_cppo_runner(
 
 ocaml_interface(
     name = "ExtHashtbl_cmi",
-    intf = ":ExtHashtbl.cppo_mli",
+    src  = ":ExtHashtbl.cppo_mli",
     ns_module = ":extLib_ns_module",
-    opts = IMPL_OPTS,
+    opts = INTF_OPTS + ["-w", "-44-50"],
     visibility = ["//visibility:private"],
     deps = COMMON_DEPS + [
         ":Enum",
@@ -282,10 +281,10 @@ ocamlx_cppo_runner(
 
 ocaml_module(
     name = "ExtHashtbl",
-    impl = ":ExtHashtbl_cppo",
+    src  = ":ExtHashtbl_cppo",
     intf = ":ExtHashtbl_cmi",
     ns_module = ":extLib_ns_module",
-    opts = IMPL_OPTS,
+    opts = INTF_OPTS + ["-w", "-3-50"],
     visibility = ["//visibility:public"],
     deps = COMMON_DEPS + [
         ":Enum",
@@ -300,9 +299,9 @@ ocamlx_cppo_runner(
 
 ocaml_module(
     name = "ExtLib",
-    impl = "extLib.ml",
+    src  = "extLib.ml",
     ns_module = ":extLib_ns_module",
-    opts = IMPL_OPTS,
+    opts = INTF_OPTS + ["-w", "-44"],
     visibility = ["//visibility:public"],
     deps = COMMON_DEPS + [
         ":ExtArray",
@@ -316,7 +315,7 @@ ocaml_module(
 
 ocaml_interface(
     name = "ExtList_cmi",
-    intf = ":ExtList.cppo_mli",
+    src  = ":ExtList.cppo_mli",
     ns_module = ":extLib_ns_module",
     opts = IMPL_OPTS,
     visibility = ["//visibility:private"],
@@ -333,10 +332,10 @@ ocamlx_cppo_runner(
 
 ocaml_module(
     name = "ExtList",
-    impl = ":ExtList_cppo",
+    src  = ":ExtList_cppo",
     intf = ":ExtList_cmi",
     ns_module = ":extLib_ns_module",
-    opts = IMPL_OPTS,
+    opts = INTF_OPTS + ["-w", "-27-39"],
     visibility = ["//visibility:public"],
     deps = COMMON_DEPS + [
         ":Enum",
@@ -351,9 +350,9 @@ ocamlx_cppo_runner(
 
 ocaml_interface(
     name = "ExtString_cmi",
-    intf = ":ExtString.cppo_mli",
+    src  = ":ExtString.cppo_mli",
     ns_module = ":extLib_ns_module",
-    opts = IMPL_OPTS,
+    opts = INTF_OPTS + ["-w", "-44-50"],
     visibility = ["//visibility:private"],
     deps = COMMON_DEPS + [
         ":Enum",
@@ -369,7 +368,7 @@ ocamlx_cppo_runner(
 
 ocaml_module(
     name = "ExtString",
-    impl = ":ExtString_cppo",
+    src  = ":ExtString_cppo",
     intf = ":ExtString_cmi",
     ns_module = ":extLib_ns_module",
     opts = IMPL_OPTS,
@@ -388,7 +387,7 @@ ocamlx_cppo_runner(
 
 ocaml_interface(
     name = "Global_cmi",
-    intf = "global.mli",
+    src  = "global.mli",
     ns_module = ":extLib_ns_module",
     opts = IMPL_OPTS,
     visibility = ["//visibility:private"],
@@ -398,7 +397,7 @@ ocaml_interface(
 
 ocaml_module(
     name = "Global",
-    impl = "global.ml",
+    src  = "global.ml",
     intf = ":Global_cmi",
     ns_module = ":extLib_ns_module",
     opts = IMPL_OPTS,
@@ -409,7 +408,7 @@ ocaml_module(
 
 ocaml_interface(
     name = "IO_cmi",
-    intf = "IO.mli",
+    src  = "IO.mli",
     ns_module = ":extLib_ns_module",
     opts = IMPL_OPTS,
     visibility = ["//visibility:private"],
@@ -421,10 +420,10 @@ ocaml_interface(
 
 ocaml_module(
     name = "IO",
-    impl = ":IO_cppo",
+    src  = ":IO_cppo",
     intf = ":IO_cmi",
     ns_module = ":extLib_ns_module",
-    opts = IMPL_OPTS,
+    opts = INTF_OPTS + ["-w", "-6-32-44"],
     visibility = ["//visibility:public"],
     deps = COMMON_DEPS + [
         ":Enum",
@@ -442,7 +441,7 @@ ocamlx_cppo_runner(
 
 ocaml_module(
     name = "Install",
-    impl = "install.ml",
+    src  = "install.ml",
     opts = IMPL_OPTS,
     visibility = ["//visibility:public"],
     deps = COMMON_DEPS + [
@@ -451,7 +450,7 @@ ocaml_module(
 
 ocaml_interface(
     name = "OptParse_cmi",
-    intf = "optParse.mli",
+    src  = "optParse.mli",
     ns_module = ":extLib_ns_module",
     opts = IMPL_OPTS,
     visibility = ["//visibility:private"],
@@ -461,10 +460,10 @@ ocaml_interface(
 
 ocaml_module(
     name = "OptParse",
-    impl = "optParse.ml",
+    src  = "optParse.ml",
     intf = ":OptParse_cmi",
     ns_module = ":extLib_ns_module",
-    opts = IMPL_OPTS,
+    opts = INTF_OPTS + ["-w", "-39-44"],
     visibility = ["//visibility:public"],
     deps = COMMON_DEPS + [
         ":ExtList",
@@ -476,7 +475,7 @@ ocaml_module(
 
 ocaml_interface(
     name = "Option_cmi",
-    intf = "option.mli",
+    src  = "option.mli",
     ns_module = ":extLib_ns_module",
     opts = IMPL_OPTS,
     visibility = ["//visibility:private"],
@@ -486,7 +485,7 @@ ocaml_interface(
 
 ocaml_module(
     name = "Option",
-    impl = "option.ml",
+    src  = "option.ml",
     intf = ":Option_cmi",
     ns_module = ":extLib_ns_module",
     opts = IMPL_OPTS,
@@ -497,7 +496,7 @@ ocaml_module(
 
 ocaml_interface(
     name = "PMap_cmi",
-    intf = "pMap.mli",
+    src  = "pMap.mli",
     ns_module = ":extLib_ns_module",
     opts = IMPL_OPTS,
     visibility = ["//visibility:private"],
@@ -508,10 +507,10 @@ ocaml_interface(
 
 ocaml_module(
     name = "PMap",
-    impl = "pMap.ml",
+    src  = "pMap.ml",
     intf = ":PMap_cmi",
     ns_module = ":extLib_ns_module",
-    opts = IMPL_OPTS,
+    opts = INTF_OPTS + ["-w", "-4-9-27-39"],
     visibility = ["//visibility:public"],
     deps = COMMON_DEPS + [
         ":Enum",
@@ -520,7 +519,7 @@ ocaml_module(
 
 ocaml_interface(
     name = "RefList_cmi",
-    intf = "refList.mli",
+    src  = "refList.mli",
     ns_module = ":extLib_ns_module",
     opts = IMPL_OPTS,
     visibility = ["//visibility:private"],
@@ -531,10 +530,10 @@ ocaml_interface(
 
 ocaml_module(
     name = "RefList",
-    impl = "refList.ml",
+    src  = "refList.ml",
     intf = ":RefList_cmi",
     ns_module = ":extLib_ns_module",
-    opts = IMPL_OPTS,
+    opts = INTF_OPTS + ["-w", "-27-44"],
     visibility = ["//visibility:public"],
     deps = COMMON_DEPS + [
         ":ExtList",
@@ -543,7 +542,7 @@ ocaml_module(
 
 ocaml_interface(
     name = "Std_cmi",
-    intf = "std.mli",
+    src  = "std.mli",
     ns_module = ":extLib_ns_module",
     opts = IMPL_OPTS,
     visibility = ["//visibility:private"],
@@ -554,10 +553,10 @@ ocaml_interface(
 
 ocaml_module(
     name = "Std",
-    impl = "std.ml",
+    src  = "std.ml",
     intf = ":Std_cmi",
     ns_module = ":extLib_ns_module",
-    opts = IMPL_OPTS,
+    opts = INTF_OPTS + ["-w", "-27-44"],
     visibility = ["//visibility:public"],
     deps = COMMON_DEPS + [
         ":Enum",
@@ -568,7 +567,7 @@ ocaml_module(
 
 ocaml_interface(
     name = "UChar_cmi",
-    intf = "uChar.mli",
+    src  = "uChar.mli",
     ns_module = ":extLib_ns_module",
     opts = IMPL_OPTS,
     visibility = ["//visibility:private"],
@@ -578,7 +577,7 @@ ocaml_interface(
 
 ocaml_module(
     name = "UChar",
-    impl = "uChar.ml",
+    src  = "uChar.ml",
     intf = ":UChar_cmi",
     ns_module = ":extLib_ns_module",
     opts = IMPL_OPTS,
@@ -589,7 +588,7 @@ ocaml_module(
 
 ocaml_interface(
     name = "UTF8_cmi",
-    intf = "uTF8.mli",
+    src  = "uTF8.mli",
     ns_module = ":extLib_ns_module",
     opts = IMPL_OPTS,
     visibility = ["//visibility:private"],
@@ -600,7 +599,7 @@ ocaml_interface(
 
 ocaml_module(
     name = "UTF8",
-    impl = "uTF8.ml",
+    src  = "uTF8.ml",
     intf = ":UTF8_cmi",
     ns_module = ":extLib_ns_module",
     opts = IMPL_OPTS,
@@ -612,7 +611,7 @@ ocaml_module(
 
 ocaml_interface(
     name = "Unzip_cmi",
-    intf = "unzip.mli",
+    src  = "unzip.mli",
     ns_module = ":extLib_ns_module",
     opts = IMPL_OPTS,
     visibility = ["//visibility:private"],
@@ -624,10 +623,10 @@ ocaml_interface(
 
 ocaml_module(
     name = "Unzip",
-    impl = "unzip.ml",
+    src  = "unzip.ml",
     intf = ":Unzip_cmi",
     ns_module = ":extLib_ns_module",
-    opts = IMPL_OPTS,
+    opts = INTF_OPTS + ["-w", "-4-27-35"],
     visibility = ["//visibility:public"],
     deps = COMMON_DEPS + [
         ":ExtBytes",

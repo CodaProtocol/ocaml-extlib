@@ -1,6 +1,11 @@
 ## OBAZL GENERATED FILE ## To retain edits (prevent overwrite), delete this line.
 
 config_setting(
+    name = "minimal",
+    flag_values = {"//:minimal": str(True)},
+)
+
+config_setting(
     name = "enable_always_link",
     flag_values = {"//:always_link": str(True)},
 )
