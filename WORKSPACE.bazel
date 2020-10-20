@@ -15,8 +15,6 @@ load("@obazl_rules_ocaml//ocaml:bootstrap.bzl",
 
 opam_configure()
 
-load("//bzl:opam.bzl", "opam_cfg")
-
 ocaml_configure()
 
 ocaml_register_toolchains(installation="host")
