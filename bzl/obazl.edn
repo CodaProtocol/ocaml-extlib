@@ -1,0 +1,62 @@
+;; use with `$ obazl ingest`
+{
+ :workspace "ocaml-extlib"
+ :config-pkg "//bzl/config"
+ ;; :ppx {:pkg "//ppx"
+ ;;       :exec "foo"}
+ :externals { }
+ :exclusions #{"src/configure.ml"}
+ :archives [{:name ocaml-extlib
+             :components [extBytes enum bitSet dynArray
+                          extArray extHashtbl extList extString extBuffer
+                          global IO option pMap std
+                          uChar uTF8 unzip refList optParse
+                          dllist extLib]
+             }
+            ]
+ :config-flags {:always-link {:default false :config-name "always_link" :flag "-linkall"}
+                :cmt {:default true :config-name "output_cmt" :flag "-bin-annot"}
+                :debug {:default true :flag "-g"}
+                :verbose {:default false :flag "-verbose"}}
+ :compile-options ["-strict-formats"
+                   "-short-paths"
+                   "-w"
+                   "+A-42-48"
+                   "-warn-error"
+                   "+A-3-44"]
+ :cppo {:defines {;; :with-bytes {:define "WITH_BYTES" :flag true}
+                  :with-bytes {:default true :d "WITH_BYTES"}
+                  :word-size {:define {m32 "WORD_SIZE_32"
+                                       m64 "WORD_SIZE_64"}
+                              :type :enum}
+                  :ocaml-version {:define "OCAML %"}
+                   }
+        ;; :opts []
+        :extensions {:exts [{:ext {:foo "bar"}}]}
+        }
+
+ :deps ["@opam//pkg:bytes"] ;; conditional on ocamlfind query
+
+ :ns-modules [{:name extLib
+               :archive true ;; [extLib.cmxa]
+               :deps ["@opam//pkg:bytes"] ;; conditional on ocamlfind query
+               ;; TODO: support ns-module-scoped flags
+               ;; :config-flags {:always-link {:default false :config-name "always_link" :flag "-linkall"}
+               ;;                :cmt {:default true :config-name "output_cmt" :flag "-bin-annot"}
+               ;;                :debug {:default true :flag "-g"}
+               ;;                :verbose {:default false :flag "-verbose"}}
+               ;; TODO: support ns-module-scoped default compile options
+               ;; :compile-options ["-strict-formats"
+               ;;                           "-short-paths"
+               ;;                           "-w"
+               ;;                           "+A-42-48"
+               ;;                           "-warn-error"
+               ;;                           "+A-3-44"]
+               ;; :cppo {}
+               :submodules [extBytes enum bitSet dynArray
+                            extArray extHashtbl extList extString extBuffer
+                            global IO option pMap std
+                            uChar uTF8 unzip refList optParse
+                            dllist extLib]
+               }]
+ }

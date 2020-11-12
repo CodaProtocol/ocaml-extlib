@@ -1,0 +1,292 @@
+## FIXME: add x_cppo_filegroup rules
+
+load(
+    "@obazl_rules_ocaml//ocaml:rules.bzl",
+    "ocaml_archive",
+    "ocaml_module",
+    "x_cppo_filegroup"
+)
+load("@bazel_skylib//rules:common_settings.bzl", "bool_flag", "string_flag")
+load(
+    "//:BUILD.bzl",
+    "REPO_ARCHIVE_OPTS",
+    "REPO_MODULE_OPTS",
+)
+load(
+    ":BUILD.bzl",
+    "PKG_ARCHIVE_OPTS",
+    "PKG_MODULE_OPTS",
+)
+load(
+    "//bzl:CPPO.bzl",
+    "CPPO_OCAML_VERSION",
+    "CPPO_WITH_BYTES",
+    "CPPO_WORD_SIZE",
+)
+
+################################################################
+## STANZA 1: LIBRARY EXTLIB_TEST
+################################################################
+EXTLIB_TEST_ARCHIVE_OPTS = REPO_ARCHIVE_OPTS + PKG_ARCHIVE_OPTS + []
+
+EXTLIB_TEST_MODULE_OPTS = REPO_MODULE_OPTS + PKG_MODULE_OPTS
+
+EXTLIB_TEST_DEPS = [
+    # do not sort (buildifier)
+    "//src:extLib",
+]
+
+##############
+ocaml_archive(
+    name = "extlib_test",
+    opts = EXTLIB_TEST_ARCHIVE_OPTS,
+    visibility = ["//visibility:public"],
+    deps = EXTLIB_TEST_DEPS + [
+        # do not sort (buildifier)
+        ":_Runner",
+        ":_Std",
+        ":_Test_Base64",
+        ":_Test_BitSet",
+        ":_Test_Dllist",
+        ":_Test_DynArray",
+        ":_Test_ExtArray",
+        ":_Test_ExtHashtbl",
+        ":_Test_ExtList",
+        ":_Test_ExtString",
+        ":_Test_IO",
+        ":_Test_UTF8",
+        ":_Test_Unzip",
+        ":_Util",
+    ],
+)
+
+#############
+ocaml_module(
+    name = "_Runner",
+    src = "runner.ml",
+    opts = EXTLIB_TEST_MODULE_OPTS,
+    deps = EXTLIB_TEST_DEPS + [
+        # do not sort (buildifier)
+        ":_Util",
+    ],
+)
+
+#############
+ocaml_module(
+    name = "_Std",
+    src = ":_Std_cppo",
+    opts = EXTLIB_TEST_MODULE_OPTS,
+    deps = EXTLIB_TEST_DEPS,
+)
+
+x_cppo_filegroup(
+    name = "_Std_cppo",
+    srcs = ["std.ml"],
+    defines = CPPO_WITH_BYTES + CPPO_WORD_SIZE + CPPO_OCAML_VERSION,
+)
+
+#############
+ocaml_module(
+    name = "_Test_Base64",
+    src = "test_Base64.ml",
+    opts = EXTLIB_TEST_MODULE_OPTS,
+    deps = EXTLIB_TEST_DEPS + [
+        # do not sort (buildifier)
+        "@opam//pkg:base64",
+        "@opam//pkg:bytes",
+        ":_Util",
+    ],
+)
+
+#############
+ocaml_module(
+    name = "_Test_BitSet",
+    src = "test_BitSet.ml",
+    opts = EXTLIB_TEST_MODULE_OPTS,
+    deps = EXTLIB_TEST_DEPS + [
+        # do not sort (buildifier)
+        ":_Std",
+        ":_Util",
+    ],
+)
+
+#############
+ocaml_module(
+    name = "_Test_Dllist",
+    src = "test_Dllist.ml",
+    opts = EXTLIB_TEST_MODULE_OPTS,
+    deps = EXTLIB_TEST_DEPS + [
+        # do not sort (buildifier)
+        ":_Util",
+    ],
+)
+
+#############
+ocaml_module(
+    name = "_Test_DynArray",
+    src = "test_DynArray.ml",
+    opts = EXTLIB_TEST_MODULE_OPTS,
+    deps = EXTLIB_TEST_DEPS + [
+        # do not sort (buildifier)
+        ":_Util",
+    ],
+)
+
+#############
+ocaml_module(
+    name = "_Test_ExtArray",
+    src = "test_ExtArray.ml",
+    opts = EXTLIB_TEST_MODULE_OPTS,
+    deps = EXTLIB_TEST_DEPS + [
+        # do not sort (buildifier)
+        ":_Util",
+    ],
+)
+
+#############
+ocaml_module(
+    name = "_Test_ExtHashtbl",
+    src = "test_ExtHashtbl.ml",
+    opts = EXTLIB_TEST_MODULE_OPTS,
+    deps = EXTLIB_TEST_DEPS + [
+        # do not sort (buildifier)
+        ":_Util",
+    ],
+)
+
+#############
+ocaml_module(
+    name = "_Test_ExtList",
+    src = "test_ExtList.ml",
+    opts = EXTLIB_TEST_MODULE_OPTS,
+    deps = EXTLIB_TEST_DEPS + [
+        # do not sort (buildifier)
+        ":_Std",
+        ":_Util",
+    ],
+)
+
+#############
+ocaml_module(
+    name = "_Test_ExtString",
+    src = "test_ExtString.ml",
+    opts = EXTLIB_TEST_MODULE_OPTS,
+    deps = EXTLIB_TEST_DEPS + [
+        # do not sort (buildifier)
+        ":_Std",
+        ":_Util",
+    ],
+)
+
+#############
+ocaml_module(
+    name = "_Test_IO",
+    src = "test_IO.ml",
+    opts = EXTLIB_TEST_MODULE_OPTS,
+    deps = EXTLIB_TEST_DEPS + [
+        # do not sort (buildifier)
+        ":_Util",
+    ],
+)
+
+#############
+ocaml_module(
+    name = "_Test_UTF8",
+    src = "test_UTF8.ml",
+    opts = EXTLIB_TEST_MODULE_OPTS,
+    deps = EXTLIB_TEST_DEPS + [
+        # do not sort (buildifier)
+        ":_Util",
+    ],
+)
+
+#############
+ocaml_module(
+    name = "_Test_Unzip",
+    src = "test_Unzip.ml",
+    opts = EXTLIB_TEST_MODULE_OPTS,
+    deps = EXTLIB_TEST_DEPS + [
+        # do not sort (buildifier)
+        ":_Util",
+    ],
+)
+
+#############
+ocaml_module(
+    name = "_Util",
+    src = "util.ml",
+    opts = EXTLIB_TEST_MODULE_OPTS,
+    deps = EXTLIB_TEST_DEPS,
+)
+
+###################################################################
+######## Configuration Settings - see :BUILD.bzl #################
+bool_flag(
+    name = "always-link",
+    build_setting_default = False,
+)
+
+config_setting(
+    name = "enable_always_link",
+    flag_values = {":always-link": str(True)},
+)
+
+bool_flag(
+    name = "debug",
+    build_setting_default = True,
+)
+
+config_setting(
+    name = "enable_debug",
+    flag_values = {":debug": str(True)},
+)
+
+bool_flag(
+    name = "threads",
+    build_setting_default = True,
+)
+
+config_setting(
+    name = "enable_threads",
+    flag_values = {":threads": str(True)},
+)
+
+bool_flag(
+    name = "tooling",
+    build_setting_default = False,
+)
+
+config_setting(
+    name = "enable_tooling",
+    flag_values = {":tooling": str(True)},
+)
+
+bool_flag(
+    name = "verbose",
+    build_setting_default = False,
+)
+
+config_setting(
+    name = "enable_verbose",
+    flag_values = {":verbose": str(True)},
+)
+
+## PPX control
+string_flag(
+    name = "ppx-out",
+    build_setting_default = "binary",
+    values = [
+        "binary",
+        "text",
+    ],
+)
+
+config_setting(
+    name = "enable_ppx_output_format_text",
+    flag_values = {":ppx-out": "text"},
+)
+
+config_setting(
+    name = "enable_ppx_output_format_binary",
+    flag_values = {":ppx-out": "binary"},
+)

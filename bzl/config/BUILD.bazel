@@ -7,22 +7,22 @@ config_setting(
 
 config_setting(
     name = "enable_always_link",
-    flag_values = {"//:always_link": str(True)},
+    flag_values = {"//:always-link": str(True)},
 )
 
 config_setting(
     name = "disable_always_link",
-    flag_values = {"//:always_link": str(False)},
+    flag_values = {"//:always-link": str(False)},
 )
 
 config_setting(
     name = "enable_output_cmt",
-    flag_values = {"//:cmt": str(True)},
+    flag_values = {"//:tooling": str(True)},
 )
 
 config_setting(
     name = "disable_output_cmt",
-    flag_values = {"//:cmt": str(False)},
+    flag_values = {"//:tooling": str(False)},
 )
 
 config_setting(
