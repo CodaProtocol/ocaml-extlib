@@ -1,0 +1,636 @@
+## OBAZL GENERATED FILE ## To retain edits (prevent overwrite), delete this line.
+
+load(
+    "@obazl_rules_ocaml//ocaml:rules.bzl",
+    "ocaml_archive",
+    "ocaml_interface",
+    "ocaml_module",
+    "ocaml_ns",
+    "x_cppo_filegroup"
+)
+
+load(
+    "//bzl:CPPO.bzl",
+    "CPPO_OCAML_VERSION",
+    "CPPO_WITH_BYTES",
+    "CPPO_WORD_SIZE",
+)
+load(
+    "BUILD.bzl",
+    "ARCHIVE_OPTS",
+    "COMMON_DEPS",
+    "COMMON_OPTS",
+    "IMPL_OPTS",
+    "INTF_OPTS",
+)
+
+ocaml_archive(
+    name = "extLib",
+    opts = ARCHIVE_OPTS,
+    visibility = ["//visibility:public"],
+    deps = COMMON_DEPS + [
+        # do not sort (buildifier)
+        ":ExtBytes",
+        ":Enum",
+        ":BitSet",
+        ":DynArray",
+        ":ExtArray",
+        ":ExtHashtbl",
+        ":ExtList",
+        ":ExtString",
+        ":ExtBuffer",
+        ":Global",
+        ":IO",
+        ":Option",
+        ":PMap",
+        ":Std",
+        ":RefList",
+        ":OptParse",
+        ":Dllist",
+        ":ExtLib",
+    ] + select({
+        "//bzl/config:minimal": [],
+        "//conditions:default": [":Unzip", "UChar", "UTF8"]
+    }),
+)
+
+EXTLIB_NS = "ExtLib"
+
+ocaml_ns(
+    name = "extLib_ns_module",
+    ns = EXTLIB_NS,
+    submodules = [
+        # do not sort (buildifier)
+        "extBytes.ml",
+        "enum.ml",
+        "bitSet.ml",
+        "dynArray.ml",
+        "extArray.ml",
+        "extHashtbl.ml",
+        "extList.ml",
+        "extString.ml",
+        "extBuffer.ml",
+        "global.ml",
+        "IO.ml",
+        "option.ml",
+        "pMap.ml",
+        "std.ml",
+        "refList.ml",
+        "optParse.ml",
+        "dllist.ml",
+        "extLib.ml",
+    ] + select({
+        "//bzl/config:minimal": [],
+        "//conditions:default": ["unzip.ml", "uChar.ml", "uTF8.ml"]
+    }),
+)
+
+ocaml_interface(
+    name = "BitSet_cmi",
+    src  = "bitSet.mli",
+    ns   = ":extLib_ns_module",
+    opts = IMPL_OPTS,
+    visibility = ["//visibility:private"],
+    deps = COMMON_DEPS + [
+        ":Enum",
+    ],
+)
+
+ocaml_module(
+    name = "BitSet",
+    src  = "bitSet.ml",
+    intf = ":BitSet_cmi",
+    ns   = ":extLib_ns_module",
+    opts = INTF_OPTS + ["-w", "-44-39"],
+    visibility = ["//visibility:public"],
+    deps = COMMON_DEPS + [
+        ":Enum",
+        ":ExtBytes",
+    ],
+)
+
+ocaml_interface(
+    name = "Dllist_cmi",
+    src  = "dllist.mli",
+    ns   = ":extLib_ns_module",
+    opts = IMPL_OPTS,
+    visibility = ["//visibility:private"],
+    deps = COMMON_DEPS + [
+        ":Enum",
+    ],
+)
+
+ocaml_module(
+    name = "Dllist",
+    src  = "dllist.ml",
+    intf = ":Dllist_cmi",
+    ns   = ":extLib_ns_module",
+    opts = IMPL_OPTS,
+    visibility = ["//visibility:public"],
+    deps = COMMON_DEPS + [
+        ":Enum",
+    ],
+)
+
+ocaml_interface(
+    name = "DynArray_cmi",
+    src  = "dynArray.mli",
+    ns   = ":extLib_ns_module",
+    opts = IMPL_OPTS,
+    visibility = ["//visibility:private"],
+    deps = COMMON_DEPS + [
+        ":Enum",
+    ],
+)
+
+ocaml_module(
+    name = "DynArray",
+    src  = "dynArray.ml",
+    intf = ":DynArray_cmi",
+    ns   = ":extLib_ns_module",
+    opts = INTF_OPTS + ["-w", "-27-39"],
+    visibility = ["//visibility:public"],
+    deps = COMMON_DEPS + [
+        ":Enum",
+    ],
+)
+
+ocaml_interface(
+    name = "Enum_cmi",
+    src  = "enum.mli",
+    ns   = ":extLib_ns_module",
+    opts = IMPL_OPTS,
+    visibility = ["//visibility:private"],
+    deps = COMMON_DEPS + [
+    ],
+)
+
+ocaml_module(
+    name = "Enum",
+    src  = "enum.ml",
+    intf = ":Enum_cmi",
+    ns   = ":extLib_ns_module",
+    opts = IMPL_OPTS,
+    visibility = ["//visibility:public"],
+    deps = COMMON_DEPS + [
+    ],
+)
+
+ocaml_interface(
+    name = "ExtArray_cmi",
+    src  = ":ExtArray.cppo_mli",
+    ns   = ":extLib_ns_module",
+    opts = IMPL_OPTS,
+    visibility = ["//visibility:private"],
+    deps = COMMON_DEPS + [
+        ":Enum",
+    ],
+)
+
+x_cppo_filegroup(
+    name = "ExtArray.cppo_mli",
+    srcs = ["extArray.mli"],
+    defines = CPPO_WITH_BYTES + CPPO_WORD_SIZE + CPPO_OCAML_VERSION,
+)
+
+ocaml_module(
+    name = "ExtArray",
+    src  = ":ExtArray_cppo",
+    intf = ":ExtArray_cmi",
+    ns   = ":extLib_ns_module",
+    opts = INTF_OPTS + ["-w", "-3-27"],
+    visibility = ["//visibility:public"],
+    deps = COMMON_DEPS + [
+        ":BitSet",
+        ":Enum",
+    ],
+)
+
+x_cppo_filegroup(
+    name = "ExtArray_cppo",
+    srcs = ["extArray.ml"],
+    defines = CPPO_WITH_BYTES + CPPO_WORD_SIZE + CPPO_OCAML_VERSION,
+)
+
+ocaml_interface(
+    name = "ExtBuffer_cmi",
+    src  = ":ExtBuffer.cppo_mli",
+    ns   = ":extLib_ns_module",
+    opts = INTF_OPTS + ["-w", "-44"],
+    visibility = ["//visibility:private"],
+    deps = COMMON_DEPS + [
+        ":ExtBytes",
+    ],
+)
+
+x_cppo_filegroup(
+    name = "ExtBuffer.cppo_mli",
+    srcs = ["extBuffer.mli"],
+    defines = CPPO_WITH_BYTES + CPPO_WORD_SIZE + CPPO_OCAML_VERSION,
+)
+
+ocaml_module(
+    name = "ExtBuffer",
+    src  = ":ExtBuffer_cppo",
+    intf = ":ExtBuffer_cmi",
+    ns   = ":extLib_ns_module",
+    opts = IMPL_OPTS + ["-w", "-33"],
+    visibility = ["//visibility:public"],
+    deps = COMMON_DEPS + [
+        ":ExtBytes",
+    ],
+)
+
+x_cppo_filegroup(
+    name = "ExtBuffer_cppo",
+    srcs = ["extBuffer.ml"],
+    defines = CPPO_WITH_BYTES + CPPO_WORD_SIZE + CPPO_OCAML_VERSION,
+)
+
+ocaml_module(
+    name = "ExtBytes",
+    src  = ":ExtBytes_cppo",
+    ns   = ":extLib_ns_module",
+    opts = IMPL_OPTS,
+    visibility = ["//visibility:public"],
+    deps = COMMON_DEPS + [
+    ],
+)
+
+x_cppo_filegroup(
+    name = "ExtBytes_cppo",
+    srcs = ["extBytes.ml"],
+    defines = CPPO_WITH_BYTES + CPPO_WORD_SIZE + CPPO_OCAML_VERSION,
+)
+
+ocaml_interface(
+    name = "ExtHashtbl_cmi",
+    src  = ":ExtHashtbl.cppo_mli",
+    ns   = ":extLib_ns_module",
+    opts = INTF_OPTS + ["-w", "-44-50"],
+    visibility = ["//visibility:private"],
+    deps = COMMON_DEPS + [
+        ":Enum",
+    ],
+)
+
+x_cppo_filegroup(
+    name = "ExtHashtbl.cppo_mli",
+    srcs = ["extHashtbl.mli"],
+    defines = CPPO_WITH_BYTES + CPPO_WORD_SIZE + CPPO_OCAML_VERSION,
+)
+
+ocaml_module(
+    name = "ExtHashtbl",
+    src  = ":ExtHashtbl_cppo",
+    intf = ":ExtHashtbl_cmi",
+    ns   = ":extLib_ns_module",
+    opts = INTF_OPTS + ["-w", "-3-50"],
+    visibility = ["//visibility:public"],
+    deps = COMMON_DEPS + [
+        ":Enum",
+    ],
+)
+
+x_cppo_filegroup(
+    name = "ExtHashtbl_cppo",
+    srcs = ["extHashtbl.ml"],
+    defines = CPPO_WITH_BYTES + CPPO_WORD_SIZE + CPPO_OCAML_VERSION,
+)
+
+ocaml_module(
+    name = "ExtLib",
+    src  = "extLib.ml",
+    ns   = ":extLib_ns_module",
+    opts = INTF_OPTS + ["-w", "-44"],
+    visibility = ["//visibility:public"],
+    deps = COMMON_DEPS + [
+        ":ExtArray",
+        ":ExtBuffer",
+        ":ExtHashtbl",
+        ":ExtList",
+        ":ExtString",
+        ":Std",
+    ],
+)
+
+ocaml_interface(
+    name = "ExtList_cmi",
+    src  = ":ExtList.cppo_mli",
+    ns   = ":extLib_ns_module",
+    opts = IMPL_OPTS,
+    visibility = ["//visibility:private"],
+    deps = COMMON_DEPS + [
+        ":Enum",
+    ],
+)
+
+x_cppo_filegroup(
+    name = "ExtList.cppo_mli",
+    srcs = ["extList.mli"],
+    defines = CPPO_WITH_BYTES + CPPO_WORD_SIZE + CPPO_OCAML_VERSION,
+)
+
+ocaml_module(
+    name = "ExtList",
+    src  = ":ExtList_cppo",
+    intf = ":ExtList_cmi",
+    ns   = ":extLib_ns_module",
+    opts = INTF_OPTS + ["-w", "-27-39"],
+    visibility = ["//visibility:public"],
+    deps = COMMON_DEPS + [
+        ":Enum",
+    ],
+)
+
+x_cppo_filegroup(
+    name = "ExtList_cppo",
+    srcs = ["extList.ml"],
+    defines = CPPO_WITH_BYTES + CPPO_WORD_SIZE + CPPO_OCAML_VERSION,
+)
+
+ocaml_interface(
+    name = "ExtString_cmi",
+    src  = ":ExtString.cppo_mli",
+    ns   = ":extLib_ns_module",
+    opts = INTF_OPTS + ["-w", "-44-50"],
+    visibility = ["//visibility:private"],
+    deps = COMMON_DEPS + [
+        ":Enum",
+        ":ExtBytes",
+    ],
+)
+
+x_cppo_filegroup(
+    name = "ExtString.cppo_mli",
+    srcs = ["extString.mli"],
+    defines = CPPO_WITH_BYTES + CPPO_WORD_SIZE + CPPO_OCAML_VERSION,
+)
+
+ocaml_module(
+    name = "ExtString",
+    src  = ":ExtString_cppo",
+    intf = ":ExtString_cmi",
+    ns   = ":extLib_ns_module",
+    opts = IMPL_OPTS + ["-w", "-3-44"],
+    visibility = ["//visibility:public"],
+    deps = COMMON_DEPS + [
+        ":Enum",
+        ":ExtBytes",
+    ],
+)
+
+x_cppo_filegroup(
+    name = "ExtString_cppo",
+    srcs = ["extString.ml"],
+    defines = CPPO_WITH_BYTES + CPPO_WORD_SIZE + CPPO_OCAML_VERSION,
+)
+
+ocaml_interface(
+    name = "Global_cmi",
+    src  = "global.mli",
+    ns   = ":extLib_ns_module",
+    opts = IMPL_OPTS,
+    visibility = ["//visibility:private"],
+    deps = COMMON_DEPS + [
+    ],
+)
+
+ocaml_module(
+    name = "Global",
+    src  = "global.ml",
+    intf = ":Global_cmi",
+    ns   = ":extLib_ns_module",
+    opts = IMPL_OPTS,
+    visibility = ["//visibility:public"],
+    deps = COMMON_DEPS + [
+    ],
+)
+
+ocaml_interface(
+    name = "IO_cmi",
+    src  = "IO.mli",
+    ns   = ":extLib_ns_module",
+    opts = INTF_OPTS + ["-w", "-44"],
+    visibility = ["//visibility:private"],
+    deps = COMMON_DEPS + [
+        ":Enum",
+        ":ExtBytes",
+    ],
+)
+
+ocaml_module(
+    name = "IO",
+    src  = ":IO_cppo",
+    intf = ":IO_cmi",
+    ns   = ":extLib_ns_module",
+    opts = INTF_OPTS + ["-w", "-6-32-44"],
+    visibility = ["//visibility:public"],
+    deps = COMMON_DEPS + [
+        ":Enum",
+        ":ExtBuffer",
+        ":ExtBytes",
+        ":ExtString",
+    ],
+)
+
+x_cppo_filegroup(
+    name = "IO_cppo",
+    srcs = ["IO.ml"],
+    defines = CPPO_WITH_BYTES + CPPO_WORD_SIZE + CPPO_OCAML_VERSION,
+)
+
+ocaml_module(
+    name = "Install",
+    src  = "install.ml",
+    opts = IMPL_OPTS,
+    visibility = ["//visibility:public"],
+    deps = COMMON_DEPS + [
+    ],
+)
+
+ocaml_interface(
+    name = "OptParse_cmi",
+    src  = "optParse.mli",
+    ns   = ":extLib_ns_module",
+    opts = IMPL_OPTS,
+    visibility = ["//visibility:private"],
+    deps = COMMON_DEPS + [
+    ],
+)
+
+ocaml_module(
+    name = "OptParse",
+    src  = "optParse.ml",
+    intf = ":OptParse_cmi",
+    ns   = ":extLib_ns_module",
+    opts = INTF_OPTS + ["-w", "-39-44"],
+    visibility = ["//visibility:public"],
+    deps = COMMON_DEPS + [
+        ":ExtList",
+        ":ExtString",
+        ":Option",
+        ":RefList",
+    ],
+)
+
+ocaml_interface(
+    name = "Option_cmi",
+    src  = "option.mli",
+    ns   = ":extLib_ns_module",
+    opts = IMPL_OPTS,
+    visibility = ["//visibility:private"],
+    deps = COMMON_DEPS + [
+    ],
+)
+
+ocaml_module(
+    name = "Option",
+    src  = "option.ml",
+    intf = ":Option_cmi",
+    ns   = ":extLib_ns_module",
+    opts = IMPL_OPTS,
+    visibility = ["//visibility:public"],
+    deps = COMMON_DEPS + [
+    ],
+)
+
+ocaml_interface(
+    name = "PMap_cmi",
+    src  = "pMap.mli",
+    ns   = ":extLib_ns_module",
+    opts = IMPL_OPTS,
+    visibility = ["//visibility:private"],
+    deps = COMMON_DEPS + [
+        ":Enum",
+    ],
+)
+
+ocaml_module(
+    name = "PMap",
+    src  = "pMap.ml",
+    intf = ":PMap_cmi",
+    ns   = ":extLib_ns_module",
+    opts = INTF_OPTS + ["-w", "-4-9-27-39"],
+    visibility = ["//visibility:public"],
+    deps = COMMON_DEPS + [
+        ":Enum",
+    ],
+)
+
+ocaml_interface(
+    name = "RefList_cmi",
+    src  = "refList.mli",
+    ns   = ":extLib_ns_module",
+    opts = IMPL_OPTS,
+    visibility = ["//visibility:private"],
+    deps = COMMON_DEPS + [
+        ":Enum",
+    ],
+)
+
+ocaml_module(
+    name = "RefList",
+    src  = "refList.ml",
+    intf = ":RefList_cmi",
+    ns   = ":extLib_ns_module",
+    opts = INTF_OPTS + ["-w", "-27-44"],
+    visibility = ["//visibility:public"],
+    deps = COMMON_DEPS + [
+        ":ExtList",
+    ],
+)
+
+ocaml_interface(
+    name = "Std_cmi",
+    src  = "std.mli",
+    ns   = ":extLib_ns_module",
+    opts = IMPL_OPTS,
+    visibility = ["//visibility:private"],
+    deps = COMMON_DEPS + [
+        ":Enum",
+    ],
+)
+
+ocaml_module(
+    name = "Std",
+    src  = "std.ml",
+    intf = ":Std_cmi",
+    ns   = ":extLib_ns_module",
+    opts = INTF_OPTS + ["-w", "-27-44"],
+    visibility = ["//visibility:public"],
+    deps = COMMON_DEPS + [
+        ":Enum",
+        ":ExtBytes",
+        ":ExtList",
+    ],
+)
+
+ocaml_interface(
+    name = "UChar_cmi",
+    src  = "uChar.mli",
+    ns   = ":extLib_ns_module",
+    opts = IMPL_OPTS,
+    visibility = ["//visibility:private"],
+    deps = COMMON_DEPS + [
+    ],
+)
+
+ocaml_module(
+    name = "UChar",
+    src  = "uChar.ml",
+    intf = ":UChar_cmi",
+    ns   = ":extLib_ns_module",
+    opts = IMPL_OPTS,
+    visibility = ["//visibility:public"],
+    deps = COMMON_DEPS + [
+    ],
+)
+
+ocaml_interface(
+    name = "UTF8_cmi",
+    src  = "uTF8.mli",
+    ns   = ":extLib_ns_module",
+    opts = IMPL_OPTS,
+    visibility = ["//visibility:private"],
+    deps = COMMON_DEPS + [
+        ":UChar",
+    ],
+)
+
+ocaml_module(
+    name = "UTF8",
+    src  = "uTF8.ml",
+    intf = ":UTF8_cmi",
+    ns   = ":extLib_ns_module",
+    opts = IMPL_OPTS,
+    visibility = ["//visibility:public"],
+    deps = COMMON_DEPS + [
+        ":UChar",
+    ],
+)
+
+ocaml_interface(
+    name = "Unzip_cmi",
+    src  = "unzip.mli",
+    ns   = ":extLib_ns_module",
+    opts = IMPL_OPTS,
+    visibility = ["//visibility:private"],
+    deps = COMMON_DEPS + [
+        ":ExtBytes",
+        ":IO",
+    ],
+)
+
+ocaml_module(
+    name = "Unzip",
+    src  = "unzip.ml",
+    intf = ":Unzip_cmi",
+    ns   = ":extLib_ns_module",
+    opts = INTF_OPTS + ["-w", "-4-27-35"],
+    visibility = ["//visibility:public"],
+    deps = COMMON_DEPS + [
+        ":ExtBytes",
+        ":IO",
+    ],
+)

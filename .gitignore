@@ -1,3 +1,11 @@
+bazel-*
+.bazel
+user.bazelrc
+*.log
+logs/
+
+.cpcache
+
 *.cmi
 *.cmo
 *.cmx
