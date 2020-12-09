@@ -16,7 +16,7 @@ load(
     "CPPO_WORD_SIZE",
 )
 load(
-    "BUILD.bzl",
+    ":BUILD.bzl",
     "ARCHIVE_OPTS",
     "COMMON_DEPS",
     "COMMON_OPTS",
