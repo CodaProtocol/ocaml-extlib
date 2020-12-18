@@ -2,8 +2,6 @@
 {
  :workspace "ocaml-extlib"
  :config-pkg "//bzl/config"
- ;; :ppx {:pkg "//ppx"
- ;;       :exec "foo"}
  :externals { }
  :exclusions #{"src/configure.ml"}
  :archives [{:name ocaml-extlib
@@ -31,7 +29,6 @@
                               :type :enum}
                   :ocaml-version {:define "OCAML %"}
                    }
-        ;; :opts []
         :extensions {:exts [{:ext {:foo "bar"}}]}
         }
 

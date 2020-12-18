@@ -1,5 +1,3 @@
-## FIXME: add x_cppo_filegroup rules
-
 load(
     "@obazl_rules_ocaml//ocaml:rules.bzl",
     "ocaml_archive",
@@ -7,16 +5,7 @@ load(
     "x_cppo_filegroup"
 )
 load("@bazel_skylib//rules:common_settings.bzl", "bool_flag", "string_flag")
-load(
-    "//:BUILD.bzl",
-    "REPO_ARCHIVE_OPTS",
-    "REPO_MODULE_OPTS",
-)
-load(
-    ":BUILD.bzl",
-    "PKG_ARCHIVE_OPTS",
-    "PKG_MODULE_OPTS",
-)
+
 load(
     "//bzl:CPPO.bzl",
     "CPPO_OCAML_VERSION",
@@ -27,9 +16,7 @@ load(
 ################################################################
 ## STANZA 1: LIBRARY EXTLIB_TEST
 ################################################################
-EXTLIB_TEST_ARCHIVE_OPTS = REPO_ARCHIVE_OPTS + PKG_ARCHIVE_OPTS + []
-
-EXTLIB_TEST_MODULE_OPTS = REPO_MODULE_OPTS + PKG_MODULE_OPTS
+EXTLIB_TEST_MODULE_OPTS = []
 
 EXTLIB_TEST_DEPS = [
     # do not sort (buildifier)
@@ -39,7 +26,7 @@ EXTLIB_TEST_DEPS = [
 ##############
 ocaml_archive(
     name = "extlib_test",
-    opts = EXTLIB_TEST_ARCHIVE_OPTS,
+    opts = [],
     visibility = ["//visibility:public"],
     deps = EXTLIB_TEST_DEPS + [
         # do not sort (buildifier)
@@ -215,78 +202,8 @@ ocaml_module(
 ocaml_module(
     name = "_Util",
     src = "util.ml",
-    opts = EXTLIB_TEST_MODULE_OPTS,
-    deps = EXTLIB_TEST_DEPS,
-)
-
-###################################################################
-######## Configuration Settings - see :BUILD.bzl #################
-bool_flag(
-    name = "always-link",
-    build_setting_default = False,
-)
-
-config_setting(
-    name = "enable_always_link",
-    flag_values = {":always-link": str(True)},
-)
-
-bool_flag(
-    name = "debug",
-    build_setting_default = True,
-)
-
-config_setting(
-    name = "enable_debug",
-    flag_values = {":debug": str(True)},
-)
-
-bool_flag(
-    name = "threads",
-    build_setting_default = True,
-)
-
-config_setting(
-    name = "enable_threads",
-    flag_values = {":threads": str(True)},
-)
-
-bool_flag(
-    name = "tooling",
-    build_setting_default = False,
-)
-
-config_setting(
-    name = "enable_tooling",
-    flag_values = {":tooling": str(True)},
-)
-
-bool_flag(
-    name = "verbose",
-    build_setting_default = False,
-)
-
-config_setting(
-    name = "enable_verbose",
-    flag_values = {":verbose": str(True)},
-)
-
-## PPX control
-string_flag(
-    name = "ppx-out",
-    build_setting_default = "binary",
-    values = [
-        "binary",
-        "text",
+    opts = EXTLIB_TEST_MODULE_OPTS + [
+        "-w", "-3"              # deprecated
     ],
-)
-
-config_setting(
-    name = "enable_ppx_output_format_text",
-    flag_values = {":ppx-out": "text"},
-)
-
-config_setting(
-    name = "enable_ppx_output_format_binary",
-    flag_values = {":ppx-out": "binary"},
+    deps = EXTLIB_TEST_DEPS,
 )

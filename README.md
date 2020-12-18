@@ -53,7 +53,8 @@ Maximal build, including modules `Unzip`, `UChar`, `UTF8`:
 
 `$ bazel build src:extLib --no//:minimal`
 
-This will build but not install the library, native mode only.
+Build everything: `$ bazel build //...:* --no//:minimal`. Minimal will
+fail, since it will try to build UTF8.
 
 For details see [bzl/README.md](bzl/README.md)
 
